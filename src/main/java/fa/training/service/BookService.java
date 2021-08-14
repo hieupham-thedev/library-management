@@ -21,6 +21,10 @@ public class BookService {
         return bookDao.getBooks();
     }
 
+    public boolean isBookIsbnExisted(String isbn) {
+        return bookDao.getBookByIsbn(isbn) != null ? true : false;
+    }
+
     public void addAuthorToBook(String isbn, String author) {
         Book book = bookDao.getBookByIsbn(isbn);
         if (book != null) {

@@ -1,12 +1,11 @@
 package fa.training.controller;
 
 import fa.training.dao.BookDao;
+import fa.training.model.Book;
+import fa.training.model.Magazine;
 import fa.training.service.BookService;
 import fa.training.service.MagazineService;
-import fa.training.view.BooksMagazinePage;
-import fa.training.view.HomePage;
-import fa.training.view.SearchBookPage;
-import fa.training.view.TopTenMagazinesbyVolumPage;
+import fa.training.view.*;
 
 public class HomeController {
 
@@ -23,8 +22,17 @@ public class HomeController {
         HomePage homePage = new HomePage();
         Integer option = homePage.showOption();
         switch (option) {
+            case 1:
+                addBook();
+                break;
+            case 2:
+                addMagazine();
+                break;
             case 3:
                 displayBooksAndMagazines();
+                break;
+            case 4:
+                addAuthorToBook();
                 break;
             case 5:
                 displayTopTenMagazinesByVolume();
@@ -37,6 +45,29 @@ public class HomeController {
             default:
                 break;
         }
+    }
+
+    private void addAuthorToBook() {
+        AddAuthorToBookPage page = new AddAuthorToBookPage();
+        String isbn = page.insertIsbnOfBook();
+        if (bookService.isBookIsbnExisted(isbn)){
+            String author = page.insertAuthor();
+            bookService.addAuthorToBook(isbn,author);
+        } else {
+            page.bookIsbnNotFound();
+        }
+    }
+
+    private void addMagazine() {
+        AddMagazinePage addMagazinePage = new AddMagazinePage();
+        Magazine magazine = addMagazinePage.showMagazineForm();
+        magazineService.create(magazine);
+    }
+
+    private void addBook() {
+        AddBookPage addBookPage = new AddBookPage();
+        Book book = addBookPage.showBookForm();
+        bookService.create(book);
     }
 
     private void displayBooksAndMagazines() {
